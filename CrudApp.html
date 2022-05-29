@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+  
+</script>
+  <script>
+    $(document).ready(function () {
+     $(".table").on("click", "#DeleteButton", function() {
+
+   $(this).closest("tr").remove();
+});
+      $('#delrow').click(function(){
+
+           $(".table input:checkbox:checked").closest('tr').remove();
+    });
+      $.getJSON("AdminUI_JSON.json", function (data) {
+        var empData = '';
+        $.each(data, function (key, value) {
+          empData += '<tr>';
+          empData += '<td> <input type="checkbox"> </td>';
+          empData += `<td> <a href="javascript:void(0)" ><span class="glyphicon id`+ value.id +`" data-id= `+value.id+`>`+ value.id + `</td>`;
+          empData += `<td> <a href="javascript:void(0)" ><span class="glyphicon name`+ value.id +`" data-id= `+value.name+`>`+ value.name + `</td>`;
+          empData += `<td> <a href="javascript:void(0)" ><span class="glyphicon email`+ value.id +`" data-id= `+value.email+`>`+ value.email + `</td>`;
+          empData += `<td> <a href="javascript:void(0)" ><span class="glyphicon role`+ value.id +`" data-id= `+value.role+`>`+ value.role + `</td>`;
+          empData += `<td> <a href="javascript:void(0)" ><span data-toggle="modal" data-target="#myModal" class="glyphicon edit" data-id=`+value.id+`>&#xe065;</span></a>`
+            + `<a href="javascript:void(0)"><span id="DeleteButton" class="glyphicon")">&#xe020;</span></a></td>`;
+          empData += '</tr>';
+        });
+        $("#myTable").append(empData);
+      });
+
+      console.log('INSIDE LOG');
+    });
+
+    $(document).on('click', '.edit', function (e) {
+      value = $(this).attr("data-id");
+      name = $(".name1").attr("data-id");
+      email = $(".email"+value).attr("data-id");
+      role = $(".role"+value).attr("data-id");
+      $("#u_id").val(value);
+      $("#fname").val(name);
+      $("#email").val(email);
+      $("#role").val(role);
+      console.log(name,email,role);
+    });
+
+
+    $(document).on('click', '.update', function (e) {
+      e.preventDefault();
+      id = $("#u_id").val();
+      name = $("#fname").val();
+      email = $("#email").val();
+      role = $("#role").val();
+      $(".email"+id).html(email);
+      $(".role"+id).html(role);
+      console.log(name,email,role);
+      $(".name"+id).html(name);
+    });
+  </script>
+
+  <script>
+  function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  var rows = table.getElementsByTagName("tr");
+  for (i = 0; i < rows.length; i++) {
+    var cells = rows[i].getElementsByTagName("td");
+    var j;
+    var rowContainsFilter = false;
+    for (j = 0; j < cells.length; j++) {
+      if (cells[j]) {
+        if (cells[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          rowContainsFilter = true;
+          continue;
+        }
+      }
+    }
+
+    if (! rowContainsFilter) {
+      rows[i].style.display= "none";
+    } else {
+      rows[i].style.display = "";
+    }
+  }
+}
+  </script>
+
+
+</head>
+
+<body>
+   <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <form action="">
+            <input type="hidden" id="u_id" name="fname" value="John"><br>
+            <label for="fname">First name:</label><br>
+            <input type="text" id="fname" name="fname" value="John"><br>
+            <label for="lname">Email:</label><br>
+            <input type="email" id="email" name="lname" value=""><br><br>
+            <label for="lname">Role:</label><br>
+            <input type="text" id="role" name="lname" value="Doe"><br><br>
+            <button type="button" class="btn btn-default update" data-dismiss="modal">submit</button>
+           
+          </form> 
+        </div>
+        <div class="modal-footer">
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <div>
+    <button class="button btn btn-secondary" id="delrow">Delete row</button>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="margin-left: 94rem; width: 30rem">
+  </div>
+  <table id="myTable" class="table  table-hover">
+    <tr>
+      <th>Select</th>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Operation</th>
+    </tr>
+  </table>
+</body>
+
+</html>
